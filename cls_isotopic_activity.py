@@ -7,6 +7,7 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
 class cls_isotopic_activity:
+    
 
     def __init__(self) -> None:
         self.define_constants()
@@ -138,7 +139,7 @@ class cls_isotopic_activity:
             prod_iso = self.iso_const[isotope]['production']            
 
         else:
-            
+
             mult_const = 1.79e5
             vol = self.hall_const[hall]['volume_L']
             surf = self.hall_const[hall]['surface_area']
