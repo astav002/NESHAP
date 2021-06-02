@@ -26,7 +26,6 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
     sigma_method = config["sigma_method"]
     replace_zero = config["replace_zero"]
     pad = config["pad"]
-    current_limit = config["current_limit"]
     no_neg = config["no_neg"]
     use_mn_bkg = config["use_mn_bkg"]
     use_val_bkg = config["use_val_bkg"]
@@ -106,8 +105,12 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
                                     usr_mn=usr_mn)
 
         t_step_min=60
-        total_uCi = air.total_activity(full, hall, current_steps, t_step_min=t_step_min )
+        
         iso = cls_isotopic_activity.cls_isotopic_activity()
+        ventilation = iso.hall_const[hall]["ventilation_cfm"]
+
+        total_uCi = air.total_activity(full, hall, current_steps, 
+                                        ventilation=ventilation, t_step_min=t_step_min )
 
         t_run_s = current_steps * t_step_min * 60
 

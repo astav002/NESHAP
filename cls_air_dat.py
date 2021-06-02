@@ -252,14 +252,14 @@ class air_dat():
         
         return dt_df
     
-    def total_activity(self, full_df, key, steps, t_step_min=60):
+    def total_activity(self, full_df, key, steps, ventilation=1000, t_step_min=60):
         mins = t_step_min
         concentration = full_df["net_"+key].sum()
         mn_concentration = full_df["net_"+key].mean()
         
-        # !!!!!!!!! Update this to use hall specific !!!!!!!!!!!!!!!!!!!
-        total = concentration * mins * cfm_to_mlmin * self.ventilation
-        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # ventilation is specific to the hall/location and passed as argument
+        total = concentration * mins * cfm_to_mlmin * ventilation
+       
 
         print("Hours run: {:2.2e}".format(mins*steps))
         print("Fraction of a year: {:2.2f}".format(mins*steps / (365.24*24*60)))
