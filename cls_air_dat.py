@@ -6,6 +6,7 @@ import os
 import datetime
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
+import json
 
 import cls_isotopic_activity as cia
 
@@ -17,35 +18,43 @@ class air_dat():
     
     def __init__(self, **kwargs):
         
+        # pull the column mappings from the column maps json file
+        col_maps = open(os.path.join(os.getcwd(), "column_maps.json"))
+        maps = json.load(col_maps)
+        self.monitor = maps["monitor"]
+        self.current = maps["current"]
+        self.energy = maps["energy"]
+        self.current_limit = maps["current_limit"]
+        self.air_threshold = maps["air_threshold"]
         
-        self.monitor = {'hall_a':'AirMon_A', 
-                             'hall_c':'AirMon_C', 
-                             'hall_b':'AirMon_B', 
-                             'hall_d':'AirMon_D', 
-                             'L':'AirMon_L', 
-                             'SL':'AirMon_SL', 
-                             'BSY':'AirMon_BSY'}
+        # self.monitor = {"hall_a":"AirMon_A", 
+        #                      "hall_c":"AirMon_C", 
+        #                      "hall_b":"AirMon_B", 
+        #                      "hall_d":"AirMon_D", 
+        #                      "L":"AirMon_L", 
+        #                      "SL":"AirMon_SL", 
+        #                      "BSY":"AirMon_BSY"}
         
-        self.current = {'hall_a':'C_A(uA)', 
-                             'hall_c':'C_C(uA)', 
-                             'hall_b':'C_B(uA)', 
-                             'hall_d':'C_D(nA)', 
-                             'BSY':'C_BSY(uA)'}
+        # self.current = {"hall_a":"C_A(uA)", 
+        #                      "hall_c":"C_C(uA)", 
+        #                      "hall_b":"C_B(uA)", 
+        #                      "hall_d":"C_D(nA)", 
+        #                      "BSY":"C_BSY(uA)"}
         
-        self.energy = {'hall_a':'E_A(MeV)', 
-                       'hall_c':'E_C(MeV)', 
-                       'hall_b':'E_B(MeV)', 
-                       'hall_d':'E_C(MeV)', 
-                       'BSY':'E_A(MeV)'}
+        # self.energy = {"hall_a":"E_A(MeV)", 
+        #                "hall_c":"E_C(MeV)", 
+        #                "hall_b":"E_B(MeV)", 
+        #                "hall_d":"E_C(MeV)", 
+        #                "BSY":"E_A(MeV)"}
         
-        if ('threshold' in kwargs):
-            self.threshold = kwargs['threshold']
+        if ("threshold" in kwargs):
+            self.threshold = kwargs["threshold"]
         else:
             self.threshold = 1e-6
             
             
-        if ('ventilation' in kwargs):
-            self.ventilation = kwargs['ventilation']
+        if ("ventilation" in kwargs):
+            self.ventilation = kwargs["ventilation"]
         else:
             self.ventilation = 1000    
             
@@ -53,17 +62,17 @@ class air_dat():
             
 
 
-    def get_data(self, fle_name='./ans2020_Jul29_Sep22_2.airdat.txt', dt_start='07/29/2021 00:00:00'):
+    def get_data(self, fle_name="./ans2020_Jul29_Sep22_2.airdat.txt", dt_start="07/29/2021 00:00:00"):
         self.fle_name = fle_name
         
         
-        air_df = pd.read_csv(fle_name, delimiter='\s+')
+        air_df = pd.read_csv(fle_name, delimiter="\s+")
 
-        dte_start = datetime.datetime.strptime(dt_start, '%m/%d/%Y %H:%M:%S')
+        dte_start = datetime.datetime.strptime(dt_start, "%m/%d/%Y %H:%M:%S")
         self.dte_start = dte_start
 
         
-        air_df['DATE_TIME'] = air_df['Time(min)'].apply(lambda x: datetime.timedelta(minutes=x) + dte_start)
+        air_df["DATE_TIME"] = air_df["Time(min)"].apply(lambda x: datetime.timedelta(minutes=x) + dte_start)
         air_df    
         return air_df
     
@@ -73,16 +82,18 @@ class air_dat():
         
         return a dataframe with just the DATE_TIME field for use in merging
         """
-        dt_df = pd.DataFrame(air_df['DATE_TIME'])
+        dt_df = pd.DataFrame(air_df["DATE_TIME"])
         return dt_df
 
-    def apply_threshold(self, air_df, key='hall_c', sigma_method=True, repl_mean=True, replace_zero=True):
+    def apply_threshold(self, air_df, key="hall_c", sigma_method=True, repl_mean=True, replace_zero=True):
+        print()
         air_df_sub = air_df[self.monitor[key]]
         #air_df = air_df[air_df_sub < self.threshold]
-        print("Applying threshold to data: {:2.2e} uCi/ml".format(self.threshold))
+        threshold = self.air_threshold[key]
+        print("Applying threshold to data: {:2.2e} uCi/ml".format(threshold))
         
         print("length before thresholding: {}".format(len(air_df)))
-        test_res = air_df_sub > self.threshold
+        test_res = air_df_sub > threshold
         
         print("Reject {} using threshold".format(len(test_res[test_res == True])))
         
@@ -92,8 +103,8 @@ class air_dat():
         # if we choose we can reject the mean + 3 sigma values once the 
         if (sigma_method):
             print("Replace greater than 3 sigma with mean value")
-            threshold = (air_df_sub[air_df_sub <= self.threshold].std() * 3 + 
-                         air_df_sub[air_df_sub <= self.threshold].mean())
+            threshold = (air_df_sub[air_df_sub <= threshold].std() * 3 + 
+                         air_df_sub[air_df_sub <= threshold].mean())
             
             sigma_test_res = air_df_sub > threshold
             print("Found {} values using > 3*sigma".format(len(test_res[sigma_test_res == True])))
@@ -132,9 +143,10 @@ class air_dat():
         return air_df
     
     
-    def get_loc_bkg(self, air_df, key='hall_c', pad=0, show_hist=True, current_limit=1, clean_bkg=True):
+    def get_loc_bkg(self, air_df, key="hall_c", pad=0, show_hist=True, current_limit=1, clean_bkg=True):
         # get the background data for the location using a padding following current-on to allow for decay
-
+        print()
+        print("Getting background data based on current limit {:2.2e}".format(current_limit))
         
         full_len = len(air_df[self.current[key]])
         
@@ -159,24 +171,24 @@ class air_dat():
         
 
         
-        bkg = air_df.loc[bkg_index, ['DATE_TIME', 
+        bkg = air_df.loc[bkg_index, ["DATE_TIME", 
                                    self.current[key], 
                                    self.monitor[key], 
                                    self.energy[key]]]
         
-        # set any zeros to average background, helps with tail points that seem to alway be 0's
+        # set any zeros to average background, helps with tail points that seem to alway be 0"s
         if (clean_bkg):
             bkg.loc[bkg[self.monitor[key]] <=1e-8, [self.monitor[key]]] = bkg[self.monitor[key]].mean()
                 
         
-        cur = air_df.loc[cur_index, ['DATE_TIME', 
+        cur = air_df.loc[cur_index, ["DATE_TIME", 
                                    self.current[key], 
                                    self.monitor[key], 
                                    self.energy[key]]]        
         
         
         
-        full_data = air_df[['DATE_TIME', 
+        full_data = air_df[["DATE_TIME", 
                                    self.current[key], 
                                    self.monitor[key], 
                                    self.energy[key]]]   
@@ -184,8 +196,8 @@ class air_dat():
         if (show_hist):
             plt.figure()
             fig, ax = plt.subplots()
-            bkg[self.monitor[key]].hist(alpha=0.5, label='bkg_'+key, ax=ax, bins=50)
-            cur[self.monitor[key]].hist(alpha=0.5, label='monitor_'+key, ax=ax, bins=50)
+            bkg[self.monitor[key]].hist(alpha=0.5, label="bkg_"+key, ax=ax, bins=50)
+            cur[self.monitor[key]].hist(alpha=0.5, label="monitor_"+key, ax=ax, bins=50)
             ax.set_title("Air Monitor Distribution: {}".format(key))
             ax.set_xlabel("Concentration ($\mu/ml$)")
             ax.set_ylabel
@@ -196,44 +208,44 @@ class air_dat():
         return full_data, cur, bkg, current_steps
     
     def normalize_get_net(self, dt_df, cur, bkg, key, no_neg=True, plot=True, use_mn_bkg=False, use_val_bkg=False, usr_mn=0.):
-        
-        bkg = bkg.rename(columns={self.monitor[key]:self.monitor[key]+'_Bkg'} )
+        print()
+        bkg = bkg.rename(columns={self.monitor[key]:self.monitor[key]+"_Bkg"} )
         
         if (use_mn_bkg):
-            bkg = pd.DataFrame(bkg).set_index('DATE_TIME').resample('30Min').asfreq()
-            bkg_mn = bkg[self.monitor[key]+'_Bkg'].mean()
+            bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").asfreq()
+            bkg_mn = bkg[self.monitor[key]+"_Bkg"].mean()
             print("Current-on background set to mean {:2.2e} uCi/ml".format(bkg_mn))
-            bkg[self.monitor[key]+'_Bkg'] = bkg[self.monitor[key]+'_Bkg'].replace(np.nan,bkg_mn)
+            bkg[self.monitor[key]+"_Bkg"] = bkg[self.monitor[key]+"_Bkg"].replace(np.nan,bkg_mn)
             
         elif (use_val_bkg):
-            bkg = pd.DataFrame(bkg).set_index('DATE_TIME').resample('30Min').asfreq()
+            bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").asfreq()
             print("Current-on background set to user value {:2.2e} uCi/ml".format(usr_mn))
-            bkg[self.monitor[key]+'_Bkg'] = bkg[self.monitor[key]+'_Bkg'].replace(np.nan,usr_mn)            
+            bkg[self.monitor[key]+"_Bkg"] = bkg[self.monitor[key]+"_Bkg"].replace(np.nan,usr_mn)            
         else:
-            bkg = pd.DataFrame(bkg).set_index('DATE_TIME').resample('30Min').interpolate(method='linear')
-        bkg_df = dt_df.merge(bkg, left_on='DATE_TIME', right_on='DATE_TIME', how='left')
+            bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").interpolate(method="linear")
+        bkg_df = dt_df.merge(bkg, left_on="DATE_TIME", right_on="DATE_TIME", how="left")
         
-        cur = cur.rename(columns={self.monitor[key]:self.monitor[key]+'_Cur'} )
-        #cur = pd.DataFrame(cur).set_index('DATE_TIME').resample('30Min').interpolate(method='linear')
-        cur_df = dt_df.merge(cur, left_on='DATE_TIME', right_on='DATE_TIME', how='left') 
+        cur = cur.rename(columns={self.monitor[key]:self.monitor[key]+"_Cur"} )
+        #cur = pd.DataFrame(cur).set_index("DATE_TIME").resample("30Min").interpolate(method="linear")
+        cur_df = dt_df.merge(cur, left_on="DATE_TIME", right_on="DATE_TIME", how="left") 
         
-        #dt_df[self.monitor[key]+'_Cur'] = cur_df[self.monitor[key]+'_Cur']
-        
-        
-        dt_df[self.monitor[key]+'_Bkg'] = bkg_df[self.monitor[key]+'_Bkg']
-        dt_df = dt_df.merge(cur_df, how='left', left_on='DATE_TIME', right_on='DATE_TIME')
+        #dt_df[self.monitor[key]+"_Cur"] = cur_df[self.monitor[key]+"_Cur"]
         
         
+        dt_df[self.monitor[key]+"_Bkg"] = bkg_df[self.monitor[key]+"_Bkg"]
+        dt_df = dt_df.merge(cur_df, how="left", left_on="DATE_TIME", right_on="DATE_TIME")
         
-        dt_df['net_'+key] = dt_df[self.monitor[key]+'_Cur'] - dt_df[self.monitor[key]+'_Bkg']
+        
+        
+        dt_df["net_"+key] = dt_df[self.monitor[key]+"_Cur"] - dt_df[self.monitor[key]+"_Bkg"]
         
         if (no_neg):
-            dt_df.loc[dt_df['net_'+key] < 0, ['net_'+key]] = 0
+            dt_df.loc[dt_df["net_"+key] < 0, ["net_"+key]] = 0
         
         if (plot):
             plt.figure()
             fig, ax = plt.subplots()
-            dt_df.plot(x='DATE_TIME', y='net_'+key, ax=ax)
+            dt_df.plot(x="DATE_TIME", y="net_"+key, ax=ax)
             ax.set_title("Net Concentration")
             plt.xticks(rotation=45)            
             plt.savefig(os.path.join(os.getcwd(), self.fle_name+ "_" + key+"_net_concentration.jpg"))
@@ -242,8 +254,8 @@ class air_dat():
     
     def total_activity(self, full_df, key, steps, t_step_min=60):
         mins = t_step_min
-        concentration = full_df['net_'+key].sum()
-        mn_concentration = full_df['net_'+key].mean()
+        concentration = full_df["net_"+key].sum()
+        mn_concentration = full_df["net_"+key].mean()
         
         # !!!!!!!!! Update this to use hall specific !!!!!!!!!!!!!!!!!!!
         total = concentration * mins * cfm_to_mlmin * self.ventilation
@@ -258,7 +270,7 @@ class air_dat():
         return total
     
     def normalize(self, df, key, net_set=True, use_net_res=True):
-        net_key = 'net_' + key
+        net_key = "net_" + key
         cur_hall_key = self.current[key]
         ene_hall_key = self.energy[key]
         air_hall_key = self.monitor[key]
@@ -274,27 +286,27 @@ class air_dat():
         else:
             norm_air = df[air_hall_key] / df[air_hall_key].max()
 
-        df['norm_'+key] = norm_c
-        df['norm_air_'+key] = norm_air
+        df["norm_"+key] = norm_c
+        df["norm_air_"+key] = norm_air
 
-        #full.plot(x='DATE_TIME', )
+        #full.plot(x="DATE_TIME", )
         fig, ax = plt.subplots(ncols=2, nrows=2, figsize=(20, 10))
-        ax[0][0].plot(df['DATE_TIME'], norm_c, 'o-', label='Normalized Current', alpha=0.5)
-        ax[0][0].plot(df['DATE_TIME'], norm_air, 'o-', label='Normalized Concentration', alpha=0.5)
+        ax[0][0].plot(df["DATE_TIME"], norm_c, "o-", label="Normalized Current", alpha=0.5)
+        ax[0][0].plot(df["DATE_TIME"], norm_air, "o-", label="Normalized Concentration", alpha=0.5)
         ax[0][0].set_title("Normalized Current and Net Concentration")
         ax[0][0].legend()
 
-        ax[0][1].plot(df['DATE_TIME'], norm_p, label='Normalized Power')
-        ax[0][1].plot(df['DATE_TIME'], norm_air, label='Normalized Concentration')
+        ax[0][1].plot(df["DATE_TIME"], norm_p, label="Normalized Power")
+        ax[0][1].plot(df["DATE_TIME"], norm_air, label="Normalized Concentration")
         ax[0][1].set_title("Normalized Power and Net Concentration")
         ax[0][1].legend()
         
-        ax[1][0].plot(norm_p, norm_air, 'x', label='Normalized Airborne')
+        ax[1][0].plot(norm_p, norm_air, "x", label="Normalized Airborne")
         ax[1][0].set_title("Airborned Concentration vs. Current")    
         ax[1][0].legend()        
 
 
-        ax[1][1].plot(norm_p, norm_air, 'x', label='Normalized Airborne')
+        ax[1][1].plot(norm_p, norm_air, "x", label="Normalized Airborne")
         ax[1][1].set_title("Airborned Concentration vs. Power")
         ax[1][1].legend()
         plt.savefig(os.path.join(os.getcwd(), self.fle_name+ "_" + key+"_current_power_plots.jpg"))
@@ -306,7 +318,7 @@ class air_dat():
     def generate_plots(self, df, key, net_set=True,):
         print("Generating standard plots")
         
-        net_key = 'net_' + key
+        net_key = "net_" + key
         cur_hall_key = self.current[key]
         ene_hall_key = self.energy[key]
         air_hall_key = self.monitor[key]
@@ -317,22 +329,22 @@ class air_dat():
             air_bkg_key = air_hall_key + "_Bkg"
         
             fig, ax = plt.subplots(figsize=(20,10), nrows=2, sharex=True)
-            ax[0].plot(df['DATE_TIME'], df[air_cur_key], 'o-', alpha=0.5, label='Current On')
-            ax[0].plot(df['DATE_TIME'], df[air_bkg_key], 'o-', alpha=0.5, label='Background')
-            ax[0].ticklabel_format(style='sci', axis='y', useOffset=False)
+            ax[0].plot(df["DATE_TIME"], df[air_cur_key], "o-", alpha=0.5, label="Current On")
+            ax[0].plot(df["DATE_TIME"], df[air_bkg_key], "o-", alpha=0.5, label="Background")
+            ax[0].ticklabel_format(style="sci", axis="y", useOffset=False)
             ax[0].set_title("Calculated Airborne Concentrations")
             ax[0].legend()
 
-            ax[1].plot(df['DATE_TIME'], df[net_key], 'o-', alpha=0.5, label="Net Signal")
+            ax[1].plot(df["DATE_TIME"], df[net_key], "o-", alpha=0.5, label="Net Signal")
             ax[1].set_title("Net Airborne Concentration $\mu Ci/ml$")
             ax[1].legend()
-            ax[1].ticklabel_format(style='sci', axis='y', useOffset=False)      
+            ax[1].ticklabel_format(style="sci", axis="y", useOffset=False)      
             plt.savefig(os.path.join(os.getcwd(), self.fle_name+ "_" + key+"_bkg_cur_overlay.jpg"))
             
         else:
             
             fig, ax = plt.subplots(figsize=(20,10))
-            ax.plot(df['DATE_TIME'], df[air_hall_key], 'o-', alpha=0.5, label='Air Monitor')
+            ax.plot(df["DATE_TIME"], df[air_hall_key], "o-", alpha=0.5, label="Air Monitor")
             ax.legend()
             ax.set_title("Air Monitor Result")
             plt.savefig(os.path.join(os.getcwd(), self.fle_name+ "_" + key+"_air_mon_result.jpg"))

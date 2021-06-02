@@ -4,6 +4,7 @@ import pandas as pd
 import os
 import datetime
 from pandas.plotting import register_matplotlib_converters
+import json
 
 
 register_matplotlib_converters()
@@ -16,37 +17,56 @@ import cls_isotopic_activity
 
 def main(fle_name, dt_start, halls, run_ttle, res_df):
     
-    # setup processing parameters
+    # setup processing parameters from configuration file
 
-    repl_mean = True # used in apply_threshold to replace zeros with the overall mean value for all data
-    sigma_method = True# used in apply_threshold to replace  > 3 sigma with the overall mean value for all data
-    replace_zero = False# used in apply_threshold to replace  < 3 sigma with the overall mean value for all data
+    run_config = open(os.path.join(os.getcwd(), "analysis_configuration.json"), 'r')
+    config = json.load(run_config)
 
-    pad = 5 # used in get_loc_bkg to determine how long after beam to associate with current on, in steps not time
-    current_limit = .01 # used in get_loc_bkg to determine if current is on or off
+    repl_mean = config["repl_mean"]
+    sigma_method = config["sigma_method"]
+    replace_zero = config["replace_zero"]
+    pad = config["pad"]
+    current_limit = config["current_limit"]
+    no_neg = config["no_neg"]
+    use_mn_bkg = config["use_mn_bkg"]
+    use_val_bkg = config["use_val_bkg"]
+    usr_mn = config["usr_mn"]
+    threshold = config["threshold"]
 
-    # note default method for sbkg correction in normalize_get_net is linear interpolation between single nearest data
-    no_neg = True # used in normalize_get_net to replace negative net values with 0 otherwise keep negatives
-    use_mn_bkg=True # used in normalize_get_net to set background values for current-on to the background mean
-    use_val_bkg=False # used in normalize_get_net to set background values for current-on to a user-specified value
-    usr_mn= 1.87e-7 # used in normalize_get_net when use_val_bkg is true, 0. is the default (no background subtraction)
+    # repl_mean = True # used in apply_threshold to replace zeros with the overall mean value for all data
+    # sigma_method = True# used in apply_threshold to replace  > 3 sigma with the overall mean value for all data
+    # replace_zero = False# used in apply_threshold to replace  < 3 sigma with the overall mean value for all data
+
+    # pad = 5 # used in get_loc_bkg to determine how long after beam to associate with current on, in steps not time
+    # current_limit = .01 # used in get_loc_bkg to determine if current is on or off
+
+    # # note default method for sbkg correction in normalize_get_net is linear interpolation between single nearest data
+    # no_neg = True # used in normalize_get_net to replace negative net values with 0 otherwise keep negatives
+    # use_mn_bkg=True # used in normalize_get_net to set background values for current-on to the background mean
+    # use_val_bkg=False # used in normalize_get_net to set background values for current-on to a user-specified value
+    # usr_mn= 1.87e-7 # used in normalize_get_net when use_val_bkg is true, 0. is the default (no background subtraction)
 
 
     # instantiate the class and set threshold
 
-    air = cls_air_dat.air_dat(threshold=1e-5)
+    air = cls_air_dat.air_dat(threshold=threshold)
     air_df = air.get_data(fle_name, dt_start=dt_start)
     #air_df = air.get_data(fle_name="./ans2020_Jul29_Sep22_2.airdat.txt", dt_start='07/01/2021 00:00:00')
 
 
     for hall in halls:
+
+        # pull all of the data loaded from the column_maps.json file to use in function calls etc.
         air_hall_key = air.monitor[hall]
         cur_hall_key = air.current[hall]
         ene_hall_key = air.energy[hall]
+        cur_lim_hall_key = air.current_limit[hall]
 
-        if ( hall == 'hall_d'):
-            # have to adjust because hall d is specified in nA current, rest are in uA
-            current_limit = current_limit * 1000
+        # if ( hall == 'hall_d'):
+        #     # have to adjust because hall d is specified in nA current, rest are in uA
+        #     current_limit = current_limit * 1000
+
+
 
 
         # output some information for the user regarding the location and dates used
@@ -56,7 +76,7 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
         print("Date Rage {} - {}".format(start, end))
 
 
-        # apply theshold to the full dataset
+        # apply theshold to the full dataset, threshold here is air_threshold from column_maps.json
 
         air_df = air.apply_threshold(air_df, key=hall,
                                     repl_mean=repl_mean,
@@ -71,7 +91,7 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
         full, val, bkg, current_steps = air.get_loc_bkg(air_df, key=hall, 
                                                         pad=pad, 
                                                         show_hist=True, 
-                                                        current_limit=current_limit)   
+                                                        current_limit=cur_lim_hall_key)   
 
         # we setup a blank dataframe with the date range we want to populate with bkg/air monitoring after processing
         dt_df = pd.DataFrame(air_df['DATE_TIME'])
@@ -131,7 +151,7 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
 
 if (__name__ == "__main__"):
 
-    fle_name = ["./ans2020_Jan01_Mar31_2.airdat.txt", "./ans2020_Jul29_Sep22_2.airdat.txt"]
+    fle_name = ["./ans2020_Jan01_Mar31_wBSY.airdat.txt", "./ans2020_Jul29_Sep22_wBSY.airdat.txt"]
     dt_start = ['01/01/2020 00:00:00', '07/29/2020 00:00:00']
     halls = ['hall_a', 'hall_c', 'hall_d']
     run_ttle = fle_name

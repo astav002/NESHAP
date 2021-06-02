@@ -1,0 +1,40 @@
+{
+      "monitor": {
+            "hall_a": "AirMon_A",
+            "hall_c": "AirMon_C",
+            "hall_b": "AirMon_B",
+            "hall_d": "AirMon_D",
+            "L": "AirMon_L",
+            "SL": "AirMon_SL",
+            "BSY": "AirMon_BSY"
+      },
+      "current": {
+            "hall_a": "C_A(uA)",
+            "hall_c": "C_C(uA)",
+            "hall_b": "C_B(uA)",
+            "hall_d": "C_D(nA)",
+            "BSY": "C_BSY(uA)"
+      },
+      "energy": {
+            "hall_a": "E_A(MeV)",
+            "hall_c": "E_C(MeV)",
+            "hall_b": "E_B(MeV)",
+            "hall_d": "E_C(MeV)",
+            "BSY": "E_A(MeV)"
+      },
+      "air_threshold":{
+            "hall_a": 1e-6,
+            "hall_c": 1e-6,
+            "hall_b": 1e-6,
+            "hall_d": 1,
+            "BSY": 1            
+      },
+      "current_limit":{
+            "hall_a": 0.01,
+            "hall_c": 0.01,
+            "hall_b": 0.01,
+            "hall_d": 10,
+            "BSY": 1           
+      }      
+
+}
