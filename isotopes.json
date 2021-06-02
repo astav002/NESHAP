@@ -1,0 +1,43 @@
+{
+	"N-13": {
+		"t_half_s": 600,
+		"production": 114900000.0,
+		"prod_type": "g"
+	},
+	"Ar-41": {
+		"t_half_s": 6.59e3,
+		"production": 0,
+		"prod_type": "n_thermal"
+	},
+	"C-11": {
+		"t_half_s": 1.23e3,
+		"production": 15500000.0,
+		"prod_type": "g"
+
+	},
+	"H-3": {
+		"t_half_s": 3.88e8,
+		"production": 22100000.0,
+		"prod_type": "g"
+	},
+	"Be-7": {
+		"t_half_s": 4.67e6,
+		"production": 5600000.0,
+		"prod_type": "g"
+	},
+	"O-15": {
+		"t_half_s": 1.26e2,
+		"production": 60200000.0,
+		"prod_type": "g"
+	},
+	"Cl-38": {
+		"t_half_s": 2.22e3,
+		"production": 6.8e5,
+		"prod_type": "g"
+	},
+	"Cl-39": {
+		"t_half_s": 3.30e3,
+		"production": 8.5e6,
+		"prod_type": "g"
+	}
+}
