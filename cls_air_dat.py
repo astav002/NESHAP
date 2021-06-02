@@ -26,6 +26,7 @@ class air_dat():
         self.energy = maps["energy"]
         self.current_limit = maps["current_limit"]
         self.air_threshold = maps["air_threshold"]
+        self.joins = maps["join"]
         
         # self.monitor = {"hall_a":"AirMon_A", 
         #                      "hall_c":"AirMon_C", 
@@ -84,6 +85,20 @@ class air_dat():
         """
         dt_df = pd.DataFrame(air_df["DATE_TIME"])
         return dt_df
+
+    def join_cols(self, air_df):
+        # we can join columns into a single extra column for later use
+        # example join 'IPM1C01', 'IPM1C02', 'IPM2C01', 'IPM2C02', ... into BSY_CUR_2(uA)
+
+        for col in self.joins:
+            print("Populate {} with max of {}".format(col, self.joins[col]))
+            air_df[col] = air_df[self.joins[col]].apply(lambda x: max(x), axis=1)
+
+        return air_df
+
+
+
+
 
     def apply_threshold(self, air_df, key="hall_c", sigma_method=True, repl_mean=True, replace_zero=True):
         print()

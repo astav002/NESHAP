@@ -50,6 +50,7 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
 
     air = cls_air_dat.air_dat(threshold=threshold)
     air_df = air.get_data(fle_name, dt_start=dt_start)
+    air.join_cols(air_df)
     #air_df = air.get_data(fle_name="./ans2020_Jul29_Sep22_2.airdat.txt", dt_start='07/01/2021 00:00:00')
 
 

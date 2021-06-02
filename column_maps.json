@@ -13,7 +13,7 @@
             "hall_c": "C_C(uA)",
             "hall_b": "C_B(uA)",
             "hall_d": "C_D(nA)",
-            "BSY": "C_BSY(uA)"
+            "BSY": "C_BSY_J(uA)"
       },
       "energy": {
             "hall_a": "E_A(MeV)",
@@ -35,6 +35,10 @@
             "hall_b": 0.01,
             "hall_d": 10,
             "BSY": 1           
+      }, 
+      "join":{
+            "C_BSY_J(uA)":["IPM1C01", "IPM1C02", "IPM2C01",
+                  "IPM2C02", "IPM3C01", "IPM3C02"]
       }      
 
 }
