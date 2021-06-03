@@ -158,7 +158,7 @@ class air_dat():
         return air_df
     
     
-    def get_loc_bkg(self, air_df, key="hall_c", pad=0, show_hist=True, current_limit=1, clean_bkg=True):
+    def get_loc_bkg(self, air_df, ttle='hist', key="hall_c", pad=0, show_hist=True, current_limit=1, clean_bkg=True):
         # get the background data for the location using a padding following current-on to allow for decay
         print()
         print("Getting background data based on current limit {:2.2e}".format(current_limit))
@@ -177,7 +177,7 @@ class air_dat():
         for i in range(1,pad):
             cur_index = cur_index | air_df.index.isin(idx+i)
 
-            
+
 
 
         bkg_index = ~cur_index   
@@ -219,12 +219,13 @@ class air_dat():
             ax.set_xlabel("Concentration ($\mu/ml$)")
             ax.set_ylabel
             ax.legend()  
-            plt.savefig(os.path.join(os.getcwd(), self.fle_name+ "_" + key+"_bkg_cur_histograms.jpg"))
+            plt.savefig(os.path.join(os.getcwd(), ttle + "_" + key+"_bkg_cur_histograms.jpg"))
+            plt.close()
         
         
         return full_data, cur, bkg, current_steps
     
-    def normalize_get_net(self, dt_df, cur, bkg, key, no_neg=True, plot=True, use_mn_bkg=False, use_val_bkg=False, usr_mn=0.):
+    def normalize_get_net(self, dt_df, cur, bkg, key, no_neg=True, plot=True, ttle="plt", use_mn_bkg=False, use_val_bkg=False, usr_mn=0.):
         print()
         bkg = bkg.rename(columns={self.monitor[key]:self.monitor[key]+"_Bkg"} )
         
@@ -265,7 +266,8 @@ class air_dat():
             dt_df.plot(x="DATE_TIME", y="net_"+key, ax=ax)
             ax.set_title("Net Concentration")
             plt.xticks(rotation=45)            
-            plt.savefig(os.path.join(os.getcwd(), self.fle_name+ "_" + key+"_net_concentration.jpg"))
+            plt.savefig(os.path.join(os.getcwd(), ttle + "_" + key+"_net_concentration.jpg"))
+            plt.close()
         
         return dt_df
     
@@ -286,7 +288,7 @@ class air_dat():
         
         return total
     
-    def normalize(self, df, key, net_set=True, use_net_res=True):
+    def normalize(self, df, key, net_set=True, ttle='plt', use_net_res=True):
         net_key = "net_" + key
         cur_hall_key = self.current[key]
         ene_hall_key = self.energy[key]
@@ -326,13 +328,14 @@ class air_dat():
         ax[1][1].plot(norm_p, norm_air, "x", label="Normalized Airborne")
         ax[1][1].set_title("Airborned Concentration vs. Power")
         ax[1][1].legend()
-        plt.savefig(os.path.join(os.getcwd(), self.fle_name+ "_" + key+"_current_power_plots.jpg"))
+        plt.savefig(os.path.join(os.getcwd(), ttle + "_" + key+"_current_power_plots.jpg"))
+        plt.close()
         
         
         
     
     
-    def generate_plots(self, df, key, net_set=True,):
+    def generate_plots(self, df, key,ttle='gen_plots', net_set=True,):
         print("Generating standard plots")
         
         net_key = "net_" + key
@@ -356,7 +359,8 @@ class air_dat():
             ax[1].set_title("Net Airborne Concentration $\mu Ci/ml$")
             ax[1].legend()
             ax[1].ticklabel_format(style="sci", axis="y", useOffset=False)      
-            plt.savefig(os.path.join(os.getcwd(), self.fle_name+ "_" + key+"_bkg_cur_overlay.jpg"))
+            plt.savefig(os.path.join(os.getcwd(), ttle+ "_" + key+"_bkg_cur_overlay.jpg"))
+            plt.close()
             
         else:
             
@@ -364,7 +368,8 @@ class air_dat():
             ax.plot(df["DATE_TIME"], df[air_hall_key], "o-", alpha=0.5, label="Air Monitor")
             ax.legend()
             ax.set_title("Air Monitor Result")
-            plt.savefig(os.path.join(os.getcwd(), self.fle_name+ "_" + key+"_air_mon_result.jpg"))
+            plt.savefig(os.path.join(os.getcwd(), ttle + "_" + key+"_air_mon_result.jpg"))
+            plt.close()
         
         
         

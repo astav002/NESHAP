@@ -1,4 +1,8 @@
 {
+	"data_files":["./ans2020_Jan01_Mar31_wBSY.airdat.txt", "./ans2020_Jul29_Sep22_wBSY.airdat.txt"],
+	"run_titles":["Jan-March_2020", "Jul-Sep_2020"],
+	"data_starts":["01/01/2020 00:00:00", "07/29/2020 00:00:00"],
+	"halls":["hall_a", "hall_c", "hall_d", "BSY"],
 	"repl_mean": true,
 	"sigma_method": true,
 	"replace_zero": false,
