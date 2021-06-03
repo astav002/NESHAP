@@ -177,6 +177,8 @@ class air_dat():
         for i in range(1,pad):
             cur_index = cur_index | air_df.index.isin(idx+i)
 
+            
+
 
         bkg_index = ~cur_index   
                 
