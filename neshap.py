@@ -5,6 +5,7 @@ import os
 import datetime
 from pandas.plotting import register_matplotlib_converters
 import json
+import sys
 
 
 register_matplotlib_converters()
@@ -88,7 +89,9 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
         # get the current (val), background (bkg) data into separate dataframes based on padding and current limits for a hall
         # anything above the current_limit assumes beam on target
 
-        full, val, bkg, current_steps = air.get_loc_bkg(air_df, key=hall, 
+        full, val, bkg, current_steps = air.get_loc_bkg(air_df, 
+                                                        ttle=run_ttle,
+                                                        key=hall, 
                                                         pad=pad, 
                                                         show_hist=True, 
                                                         current_limit=cur_lim_hall_key)   
@@ -100,6 +103,7 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
         full = air.normalize_get_net(dt_df, val, bkg,
                                     key=hall, 
                                     no_neg=no_neg, 
+                                    ttle=run_ttle,
                                     plot=True, 
                                     use_mn_bkg=use_mn_bkg, 
                                     use_val_bkg=use_val_bkg, 
@@ -147,7 +151,7 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
 
 
         # Generate standard plots
-        air.generate_plots(full, hall, net_set=True)
+        air.generate_plots(full, hall, ttle=run_ttle, net_set=True)
         print()
 
     return res_df
@@ -155,10 +159,39 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
 
 if (__name__ == "__main__"):
 
-    fle_name = ["./ans2020_Jan01_Mar31_wBSY.airdat.txt", "./ans2020_Jul29_Sep22_wBSY.airdat.txt"]
-    dt_start = ['01/01/2020 00:00:00', '07/29/2020 00:00:00']
-    halls = ['hall_a', 'hall_c', 'hall_d']
-    run_ttle = fle_name
+
+
+    if (len(sys.argv) > 1):
+        fle_name = []
+        dt_start = []        
+        for i in range(1,len(sys.argv)):
+            fle_name.append(sys.argv[i])
+
+        for fle in fle_name:
+            dt = input("Enter the start date in format 01/01/2021 00:00:00 for file {} \n".format(fle))
+            dt_start.append(dt)
+
+        usr_hall = input("Enter the hall (format hall_a) or hit Enter to run all: \n")
+        halls = ['hall_a', 'hall_c', 'hall_d', 'BSY']
+        if (usr_hall == ""):
+            halls = halls
+        else:
+            halls = [usr_hall]        
+
+        run_ttle = fle_name
+
+    else:
+        run_config = open(os.path.join(os.getcwd(), "analysis_configuration.json"), 'r')
+        config = json.load(run_config)
+        fle_name = config["data_files"]
+        dt_start = config["data_starts"]
+        halls = config["halls"]
+        run_ttle = config["run_titles"]
+
+
+        # fle_name = ["./ans2020_Jan01_Mar31_wBSY.airdat.txt", "./ans2020_Jul29_Sep22_wBSY.airdat.txt"]
+        # dt_start = ['01/01/2020 00:00:00', '07/29/2020 00:00:00']
+
 
     # this is the holder for the results
     res_df = pd.DataFrame(columns=["Run", "Start Date", "Hall", "Isotope", "Activity(uCi)", "Lambda_D(s)", "Lambda_V(s)", "P"])
@@ -170,14 +203,7 @@ if (__name__ == "__main__"):
     # else:
     #     fle_name = usr_fle
 
-    usr_hall = input("Enter the hall (format hall_a) or hit Enter to run all: \n")
-    
-    if (usr_hall == ""):
-        halls = halls
-    else:
-        halls = [usr_hall]        
 
-    run_ttle = fle_name
 
     for i in range(len(fle_name)):
         res_df = main(fle_name[i], dt_start[i], halls, run_ttle[i], res_df)
