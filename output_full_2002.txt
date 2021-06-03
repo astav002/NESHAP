@@ -1,0 +1,388 @@
+Ventilation Rate: 1000 cfm
+Populate C_BSY_J(uA) with max of ['IPM1C01', 'IPM1C02', 'IPM2C01', 'IPM2C02', 'IPM3C01', 'IPM3C02']
+Running results for hall_a
+Date Rage 01/01/2020 00:30:00 - 03/31/2020 23:30:00
+
+Applying threshold to data: 1.00e-06 uCi/ml
+length before thresholding: 2168
+Reject 51 using threshold
+Replace greater than 3 sigma with mean value
+Found 48 values using > 3*sigma
+Replacing thresholded rejection with mean value
+Mean value replacement: 3.38e-07 uCi/ml
+length after thresholding: 2168
+
+Getting background data based on current limit 1.00e-02
+Full Data length: 2168
+Original Current-On Data length: 1288
+Current-on Data length after pad=5: 1490
+
+Current-on background set to mean 1.21e-07 uCi/ml
+
+Initialize isotopic activity parameters
+
+Hours run: 8.94e+04
+Fraction of a year: 0.17
+Sum of concentration: 4.93e-04 uCi/ml
+Average Concentration 3.31e-07 uCi/ml
+Total: 8.38e+05 uCi
+************************
+
+Calculating isotopic activities from total
+Running time: 5364000.00 s
+Isotope N-13, t_half (seconds): 6.00e+02 (lambda_d 1.16e-03), lambda_v 1.12e-02,  P: 1.15e+08
+N-13 Actvitivity: 8.38e+05 uCi
+Isotope Ar-41, t_half (seconds): 6.59e+03 (lambda_d 1.05e-04), lambda_v 1.12e-02,  P: 0.00e+00
+Ar-41 Actvitivity: 2.77e+01 uCi
+Isotope C-11, t_half (seconds): 1.23e+03 (lambda_d 5.64e-04), lambda_v 1.12e-02,  P: 1.55e+07
+C-11 Actvitivity: 5.79e+04 uCi
+Isotope H-3, t_half (seconds): 3.88e+08 (lambda_d 1.79e-09), lambda_v 1.12e-02,  P: 2.21e+07
+H-3 Actvitivity: 2.75e-01 uCi
+Isotope Be-7, t_half (seconds): 4.67e+06 (lambda_d 1.48e-07), lambda_v 1.12e-02,  P: 5.60e+06
+Be-7 Actvitivity: 5.79e+00 uCi
+Isotope O-15, t_half (seconds): 1.26e+02 (lambda_d 5.50e-03), lambda_v 1.12e-02,  P: 6.02e+07
+O-15 Actvitivity: 1.55e+06 uCi
+Isotope Cl-38, t_half (seconds): 2.22e+03 (lambda_d 3.12e-04), lambda_v 1.12e-02,  P: 6.80e+05
+Cl-38 Actvitivity: 1.44e+03 uCi
+Isotope Cl-39, t_half (seconds): 3.30e+03 (lambda_d 2.10e-04), lambda_v 1.12e-02,  P: 8.50e+06
+Cl-39 Actvitivity: 1.22e+04 uCi
+Generating standard plots
+
+Running results for hall_c
+Date Rage 01/01/2020 00:30:00 - 03/31/2020 23:30:00
+
+Applying threshold to data: 1.00e-06 uCi/ml
+length before thresholding: 2168
+Reject 47 using threshold
+Replace greater than 3 sigma with mean value
+Found 1 values using > 3*sigma
+Replacing thresholded rejection with mean value
+Mean value replacement: 1.86e-07 uCi/ml
+length after thresholding: 2168
+
+Getting background data based on current limit 1.00e-02
+Full Data length: 2168
+Original Current-On Data length: 1154
+Current-on Data length after pad=5: 1350
+
+Current-on background set to mean 1.49e-07 uCi/ml
+
+Initialize isotopic activity parameters
+
+Hours run: 8.10e+04
+Fraction of a year: 0.15
+Sum of concentration: 1.36e-04 uCi/ml
+Average Concentration 1.01e-07 uCi/ml
+Total: 2.32e+05 uCi
+************************
+
+Calculating isotopic activities from total
+Running time: 4860000.00 s
+Isotope N-13, t_half (seconds): 6.00e+02 (lambda_d 1.16e-03), lambda_v 1.57e-02,  P: 1.15e+08
+N-13 Actvitivity: 2.32e+05 uCi
+Isotope Ar-41, t_half (seconds): 6.59e+03 (lambda_d 1.05e-04), lambda_v 1.57e-02,  P: 0.00e+00
+Ar-41 Actvitivity: 6.57e+00 uCi
+Isotope C-11, t_half (seconds): 1.23e+03 (lambda_d 5.64e-04), lambda_v 1.57e-02,  P: 1.55e+07
+C-11 Actvitivity: 1.58e+04 uCi
+Isotope H-3, t_half (seconds): 3.88e+08 (lambda_d 1.79e-09), lambda_v 1.57e-02,  P: 2.21e+07
+H-3 Actvitivity: 7.40e-02 uCi
+Isotope Be-7, t_half (seconds): 4.67e+06 (lambda_d 1.48e-07), lambda_v 1.57e-02,  P: 5.60e+06
+Be-7 Actvitivity: 1.56e+00 uCi
+Isotope O-15, t_half (seconds): 1.26e+02 (lambda_d 5.50e-03), lambda_v 1.57e-02,  P: 6.02e+07
+O-15 Actvitivity: 4.60e+05 uCi
+Isotope Cl-38, t_half (seconds): 2.22e+03 (lambda_d 3.12e-04), lambda_v 1.57e-02,  P: 6.80e+05
+Cl-38 Actvitivity: 3.90e+02 uCi
+Isotope Cl-39, t_half (seconds): 3.30e+03 (lambda_d 2.10e-04), lambda_v 1.57e-02,  P: 8.50e+06
+Cl-39 Actvitivity: 3.30e+03 uCi
+Generating standard plots
+
+Running results for hall_d
+Date Rage 01/01/2020 00:30:00 - 03/31/2020 23:30:00
+
+Applying threshold to data: 1.00e+00 uCi/ml
+length before thresholding: 2168
+Reject 0 using threshold
+Replace greater than 3 sigma with mean value
+Found 22 values using > 3*sigma
+Replacing thresholded rejection with mean value
+Mean value replacement: 3.20e-07 uCi/ml
+length after thresholding: 2168
+
+Getting background data based on current limit 1.00e+01
+Full Data length: 2168
+Original Current-On Data length: 1397
+Current-on Data length after pad=5: 1607
+
+Current-on background set to mean 1.69e-07 uCi/ml
+
+Initialize isotopic activity parameters
+
+Hours run: 9.64e+04
+Fraction of a year: 0.18
+Sum of concentration: 3.68e-04 uCi/ml
+Average Concentration 2.29e-07 uCi/ml
+Total: 3.75e+04 uCi
+************************
+
+Calculating isotopic activities from total
+Running time: 5785200.00 s
+Isotope N-13, t_half (seconds): 6.00e+02 (lambda_d 1.16e-03), lambda_v 2.55e-02,  P: 1.15e+08
+N-13 Actvitivity: 3.75e+04 uCi
+Isotope Ar-41, t_half (seconds): 6.59e+03 (lambda_d 1.05e-04), lambda_v 2.55e-02,  P: 0.00e+00
+Ar-41 Actvitivity: 2.41e-01 uCi
+Isotope C-11, t_half (seconds): 1.23e+03 (lambda_d 5.64e-04), lambda_v 2.55e-02,  P: 1.55e+07
+C-11 Actvitivity: 2.53e+03 uCi
+Isotope H-3, t_half (seconds): 3.88e+08 (lambda_d 1.79e-09), lambda_v 2.55e-02,  P: 2.21e+07
+H-3 Actvitivity: 1.17e-02 uCi
+Isotope Be-7, t_half (seconds): 4.67e+06 (lambda_d 1.48e-07), lambda_v 2.55e-02,  P: 5.60e+06
+Be-7 Actvitivity: 2.46e-01 uCi
+Isotope O-15, t_half (seconds): 1.26e+02 (lambda_d 5.50e-03), lambda_v 2.55e-02,  P: 6.02e+07
+O-15 Actvitivity: 8.05e+04 uCi
+Isotope Cl-38, t_half (seconds): 2.22e+03 (lambda_d 3.12e-04), lambda_v 2.55e-02,  P: 6.80e+05
+Cl-38 Actvitivity: 6.20e+01 uCi
+Isotope Cl-39, t_half (seconds): 3.30e+03 (lambda_d 2.10e-04), lambda_v 2.55e-02,  P: 8.50e+06
+Cl-39 Actvitivity: 5.23e+02 uCi
+Generating standard plots
+
+Running results for BSY
+Date Rage 01/01/2020 00:30:00 - 03/31/2020 23:30:00
+
+Applying threshold to data: 1.00e+00 uCi/ml
+length before thresholding: 2168
+Reject 0 using threshold
+Replace greater than 3 sigma with mean value
+Found 40 values using > 3*sigma
+Replacing thresholded rejection with mean value
+Mean value replacement: 1.33e-07 uCi/ml
+length after thresholding: 2168
+
+Getting background data based on current limit 1.00e+00
+Full Data length: 2168
+Original Current-On Data length: 1593
+Current-on Data length after pad=5: 1786
+
+Current-on background set to mean 3.44e-08 uCi/ml
+
+Initialize isotopic activity parameters
+
+Hours run: 1.07e+05
+Fraction of a year: 0.20
+Sum of concentration: 2.33e-04 uCi/ml
+Average Concentration 1.31e-07 uCi/ml
+Total: 3.96e+05 uCi
+************************
+
+Calculating isotopic activities from total
+Running time: 6429600.00 s
+Isotope N-13, t_half (seconds): 6.00e+02 (lambda_d 1.16e-03), lambda_v 2.59e-02,  P: 1.15e+08
+N-13 Actvitivity: 3.96e+05 uCi
+Isotope Ar-41, t_half (seconds): 6.59e+03 (lambda_d 1.05e-04), lambda_v 2.59e-02,  P: 0.00e+00
+Ar-41 Actvitivity: 1.77e+01 uCi
+Isotope C-11, t_half (seconds): 1.23e+03 (lambda_d 5.64e-04), lambda_v 2.59e-02,  P: 1.55e+07
+C-11 Actvitivity: 2.67e+04 uCi
+Isotope H-3, t_half (seconds): 3.88e+08 (lambda_d 1.79e-09), lambda_v 2.59e-02,  P: 2.21e+07
+H-3 Actvitivity: 1.23e-01 uCi
+Isotope Be-7, t_half (seconds): 4.67e+06 (lambda_d 1.48e-07), lambda_v 2.59e-02,  P: 5.60e+06
+Be-7 Actvitivity: 2.59e+00 uCi
+Isotope O-15, t_half (seconds): 1.26e+02 (lambda_d 5.50e-03), lambda_v 2.59e-02,  P: 6.02e+07
+O-15 Actvitivity: 8.52e+05 uCi
+Isotope Cl-38, t_half (seconds): 2.22e+03 (lambda_d 3.12e-04), lambda_v 2.59e-02,  P: 6.80e+05
+Cl-38 Actvitivity: 6.54e+02 uCi
+Isotope Cl-39, t_half (seconds): 3.30e+03 (lambda_d 2.10e-04), lambda_v 2.59e-02,  P: 8.50e+06
+Cl-39 Actvitivity: 5.52e+03 uCi
+Generating standard plots
+
+Ventilation Rate: 1000 cfm
+Populate C_BSY_J(uA) with max of ['IPM1C01', 'IPM1C02', 'IPM2C01', 'IPM2C02', 'IPM3C01', 'IPM3C02']
+Running results for hall_a
+Date Rage 07/29/2020 00:30:00 - 09/21/2020 13:30:00
+
+Applying threshold to data: 1.00e-06 uCi/ml
+length before thresholding: 1309
+Reject 11 using threshold
+Replace greater than 3 sigma with mean value
+Found 11 values using > 3*sigma
+Replacing thresholded rejection with mean value
+Mean value replacement: 2.64e-07 uCi/ml
+length after thresholding: 1309
+
+Getting background data based on current limit 1.00e-02
+Full Data length: 1309
+Original Current-On Data length: 737
+Current-on Data length after pad=5: 885
+
+Current-on background set to mean 1.89e-07 uCi/ml
+
+Initialize isotopic activity parameters
+
+Hours run: 5.31e+04
+Fraction of a year: 0.10
+Sum of concentration: 1.05e-04 uCi/ml
+Average Concentration 1.19e-07 uCi/ml
+Total: 1.79e+05 uCi
+************************
+
+Calculating isotopic activities from total
+Running time: 3186000.00 s
+Isotope N-13, t_half (seconds): 6.00e+02 (lambda_d 1.16e-03), lambda_v 1.12e-02,  P: 1.15e+08
+N-13 Actvitivity: 1.79e+05 uCi
+Isotope Ar-41, t_half (seconds): 6.59e+03 (lambda_d 1.05e-04), lambda_v 1.12e-02,  P: 0.00e+00
+Ar-41 Actvitivity: 5.91e+00 uCi
+Isotope C-11, t_half (seconds): 1.23e+03 (lambda_d 5.64e-04), lambda_v 1.12e-02,  P: 1.55e+07
+C-11 Actvitivity: 1.24e+04 uCi
+Isotope H-3, t_half (seconds): 3.88e+08 (lambda_d 1.79e-09), lambda_v 1.12e-02,  P: 2.21e+07
+H-3 Actvitivity: 5.86e-02 uCi
+Isotope Be-7, t_half (seconds): 4.67e+06 (lambda_d 1.48e-07), lambda_v 1.12e-02,  P: 5.60e+06
+Be-7 Actvitivity: 1.23e+00 uCi
+Isotope O-15, t_half (seconds): 1.26e+02 (lambda_d 5.50e-03), lambda_v 1.12e-02,  P: 6.02e+07
+O-15 Actvitivity: 3.30e+05 uCi
+Isotope Cl-38, t_half (seconds): 2.22e+03 (lambda_d 3.12e-04), lambda_v 1.12e-02,  P: 6.80e+05
+Cl-38 Actvitivity: 3.07e+02 uCi
+Isotope Cl-39, t_half (seconds): 3.30e+03 (lambda_d 2.10e-04), lambda_v 1.12e-02,  P: 8.50e+06
+Cl-39 Actvitivity: 2.60e+03 uCi
+Generating standard plots
+
+Running results for hall_c
+Date Rage 07/29/2020 00:30:00 - 09/21/2020 13:30:00
+
+Applying threshold to data: 1.00e-06 uCi/ml
+length before thresholding: 1309
+Reject 0 using threshold
+Replace greater than 3 sigma with mean value
+Found 2 values using > 3*sigma
+Replacing thresholded rejection with mean value
+Mean value replacement: 3.78e-07 uCi/ml
+length after thresholding: 1309
+
+Getting background data based on current limit 1.00e-02
+Full Data length: 1309
+Original Current-On Data length: 759
+Current-on Data length after pad=5: 913
+
+Current-on background set to mean 3.53e-07 uCi/ml
+
+Initialize isotopic activity parameters
+
+Hours run: 5.48e+04
+Fraction of a year: 0.10
+Sum of concentration: 3.83e-05 uCi/ml
+Average Concentration 4.19e-08 uCi/ml
+Total: 6.50e+04 uCi
+************************
+
+Calculating isotopic activities from total
+Running time: 3286800.00 s
+Isotope N-13, t_half (seconds): 6.00e+02 (lambda_d 1.16e-03), lambda_v 1.57e-02,  P: 1.15e+08
+N-13 Actvitivity: 6.50e+04 uCi
+Isotope Ar-41, t_half (seconds): 6.59e+03 (lambda_d 1.05e-04), lambda_v 1.57e-02,  P: 0.00e+00
+Ar-41 Actvitivity: 1.84e+00 uCi
+Isotope C-11, t_half (seconds): 1.23e+03 (lambda_d 5.64e-04), lambda_v 1.57e-02,  P: 1.55e+07
+C-11 Actvitivity: 4.43e+03 uCi
+Isotope H-3, t_half (seconds): 3.88e+08 (lambda_d 1.79e-09), lambda_v 1.57e-02,  P: 2.21e+07
+H-3 Actvitivity: 2.07e-02 uCi
+Isotope Be-7, t_half (seconds): 4.67e+06 (lambda_d 1.48e-07), lambda_v 1.57e-02,  P: 5.60e+06
+Be-7 Actvitivity: 4.37e-01 uCi
+Isotope O-15, t_half (seconds): 1.26e+02 (lambda_d 5.50e-03), lambda_v 1.57e-02,  P: 6.02e+07
+O-15 Actvitivity: 1.29e+05 uCi
+Isotope Cl-38, t_half (seconds): 2.22e+03 (lambda_d 3.12e-04), lambda_v 1.57e-02,  P: 6.80e+05
+Cl-38 Actvitivity: 1.09e+02 uCi
+Isotope Cl-39, t_half (seconds): 3.30e+03 (lambda_d 2.10e-04), lambda_v 1.57e-02,  P: 8.50e+06
+Cl-39 Actvitivity: 9.26e+02 uCi
+Generating standard plots
+
+Running results for hall_d
+Date Rage 07/29/2020 00:30:00 - 09/21/2020 13:30:00
+
+Applying threshold to data: 1.00e+00 uCi/ml
+length before thresholding: 1309
+Reject 0 using threshold
+Replace greater than 3 sigma with mean value
+Found 20 values using > 3*sigma
+Replacing thresholded rejection with mean value
+Mean value replacement: 3.21e-07 uCi/ml
+length after thresholding: 1309
+
+Getting background data based on current limit 1.00e+01
+Full Data length: 1309
+Original Current-On Data length: 837
+Current-on Data length after pad=5: 1021
+
+Current-on background set to mean 2.17e-07 uCi/ml
+
+Initialize isotopic activity parameters
+
+Hours run: 6.13e+04
+Fraction of a year: 0.12
+Sum of concentration: 1.53e-04 uCi/ml
+Average Concentration 1.50e-07 uCi/ml
+Total: 1.56e+04 uCi
+************************
+
+Calculating isotopic activities from total
+Running time: 3675600.00 s
+Isotope N-13, t_half (seconds): 6.00e+02 (lambda_d 1.16e-03), lambda_v 2.55e-02,  P: 1.15e+08
+N-13 Actvitivity: 1.56e+04 uCi
+Isotope Ar-41, t_half (seconds): 6.59e+03 (lambda_d 1.05e-04), lambda_v 2.55e-02,  P: 0.00e+00
+Ar-41 Actvitivity: 1.00e-01 uCi
+Isotope C-11, t_half (seconds): 1.23e+03 (lambda_d 5.64e-04), lambda_v 2.55e-02,  P: 1.55e+07
+C-11 Actvitivity: 1.05e+03 uCi
+Isotope H-3, t_half (seconds): 3.88e+08 (lambda_d 1.79e-09), lambda_v 2.55e-02,  P: 2.21e+07
+H-3 Actvitivity: 4.84e-03 uCi
+Isotope Be-7, t_half (seconds): 4.67e+06 (lambda_d 1.48e-07), lambda_v 2.55e-02,  P: 5.60e+06
+Be-7 Actvitivity: 1.02e-01 uCi
+Isotope O-15, t_half (seconds): 1.26e+02 (lambda_d 5.50e-03), lambda_v 2.55e-02,  P: 6.02e+07
+O-15 Actvitivity: 3.34e+04 uCi
+Isotope Cl-38, t_half (seconds): 2.22e+03 (lambda_d 3.12e-04), lambda_v 2.55e-02,  P: 6.80e+05
+Cl-38 Actvitivity: 2.57e+01 uCi
+Isotope Cl-39, t_half (seconds): 3.30e+03 (lambda_d 2.10e-04), lambda_v 2.55e-02,  P: 8.50e+06
+Cl-39 Actvitivity: 2.17e+02 uCi
+Generating standard plots
+
+Running results for BSY
+Date Rage 07/29/2020 00:30:00 - 09/21/2020 13:30:00
+
+Applying threshold to data: 1.00e+00 uCi/ml
+length before thresholding: 1309
+Reject 0 using threshold
+Replace greater than 3 sigma with mean value
+Found 6 values using > 3*sigma
+Replacing thresholded rejection with mean value
+Mean value replacement: 2.99e-07 uCi/ml
+length after thresholding: 1309
+
+Getting background data based on current limit 1.00e+00
+Full Data length: 1309
+Original Current-On Data length: 955
+Current-on Data length after pad=5: 1104
+
+Current-on background set to mean 2.06e-07 uCi/ml
+
+Initialize isotopic activity parameters
+
+Hours run: 6.62e+04
+Fraction of a year: 0.13
+Sum of concentration: 1.29e-04 uCi/ml
+Average Concentration 1.17e-07 uCi/ml
+Total: 2.19e+05 uCi
+************************
+
+Calculating isotopic activities from total
+Running time: 3974400.00 s
+Isotope N-13, t_half (seconds): 6.00e+02 (lambda_d 1.16e-03), lambda_v 2.59e-02,  P: 1.15e+08
+N-13 Actvitivity: 2.19e+05 uCi
+Isotope Ar-41, t_half (seconds): 6.59e+03 (lambda_d 1.05e-04), lambda_v 2.59e-02,  P: 0.00e+00
+Ar-41 Actvitivity: 9.80e+00 uCi
+Isotope C-11, t_half (seconds): 1.23e+03 (lambda_d 5.64e-04), lambda_v 2.59e-02,  P: 1.55e+07
+C-11 Actvitivity: 1.47e+04 uCi
+Isotope H-3, t_half (seconds): 3.88e+08 (lambda_d 1.79e-09), lambda_v 2.59e-02,  P: 2.21e+07
+H-3 Actvitivity: 6.80e-02 uCi
+Isotope Be-7, t_half (seconds): 4.67e+06 (lambda_d 1.48e-07), lambda_v 2.59e-02,  P: 5.60e+06
+Be-7 Actvitivity: 1.43e+00 uCi
+Isotope O-15, t_half (seconds): 1.26e+02 (lambda_d 5.50e-03), lambda_v 2.59e-02,  P: 6.02e+07
+O-15 Actvitivity: 4.71e+05 uCi
+Isotope Cl-38, t_half (seconds): 2.22e+03 (lambda_d 3.12e-04), lambda_v 2.59e-02,  P: 6.80e+05
+Cl-38 Actvitivity: 3.62e+02 uCi
+Isotope Cl-39, t_half (seconds): 3.30e+03 (lambda_d 2.10e-04), lambda_v 2.59e-02,  P: 8.50e+06
+Cl-39 Actvitivity: 3.05e+03 uCi
+Generating standard plots
+
