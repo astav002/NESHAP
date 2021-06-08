@@ -23,9 +23,9 @@
             "BSY": "E_A(MeV)"
       },
       "air_threshold":{
-            "hall_a": 1e-6,
-            "hall_c": 1e-6,
-            "hall_b": 1e-6,
+            "hall_a": 1e-5,
+            "hall_c": 1e-5,
+            "hall_b": 1e-5,
             "hall_d": 1,
             "BSY": 1            
       },

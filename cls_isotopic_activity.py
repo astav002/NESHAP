@@ -188,9 +188,9 @@ if ( __name__ == "__main__"):
     iso = cls_isotopic_activity()
 
 
-    hall = "hall_d"
-    n13_hall_activity = 1
-    t_run_s = 7290000
+    hall = "hall_a"
+    n13_hall_activity = 4.08e5
+    t_run_s = 6886800
 
 
 

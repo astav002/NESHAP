@@ -184,7 +184,9 @@ class air_dat():
                 
         idx = np.sort(idx)
         print("Current-on Data length after pad={}: {}".format(pad, len(air_df[cur_index])))
-        current_steps = len(air_df[cur_index])
+
+        # current steps are taken from when current is actually on; current-on data set is active_current+pading set
+        current_steps = len(active_cur)
         
 
         
@@ -280,7 +282,7 @@ class air_dat():
         total = concentration * mins * cfm_to_mlmin * ventilation
        
 
-        print("Hours run: {:2.2e}".format(mins*steps))
+        print("Minutes run: {:2.2e}".format(mins*steps))
         print("Fraction of a year: {:2.2f}".format(mins*steps / (365.24*24*60)))
         print("Sum of concentration: {:2.2e} uCi/ml".format(concentration))
         print("Average Concentration {:2.2e} uCi/ml".format(mn_concentration))
