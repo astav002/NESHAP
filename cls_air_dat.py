@@ -27,6 +27,7 @@ class air_dat():
         self.current_limit = maps["current_limit"]
         self.air_threshold = maps["air_threshold"]
         self.joins = maps["join"]
+        self.current_units = maps["current_unit"]
         
         # self.monitor = {"hall_a":"AirMon_A", 
         #                      "hall_c":"AirMon_C", 
@@ -184,7 +185,9 @@ class air_dat():
                 
         idx = np.sort(idx)
         print("Current-on Data length after pad={}: {}".format(pad, len(air_df[cur_index])))
-        current_steps = len(air_df[cur_index])
+
+        # current steps are taken from when current is actually on; current-on data set is active_current+pading set
+        current_steps = len(active_cur)
         
 
         
@@ -224,23 +227,74 @@ class air_dat():
         
         
         return full_data, cur, bkg, current_steps
+
     
-    def normalize_get_net(self, dt_df, cur, bkg, key, no_neg=True, plot=True, ttle="plt", use_mn_bkg=False, use_val_bkg=False, usr_mn=0.):
+    def normalize_get_net(self, dt_df, cur, bkg, key, no_neg=True, plot=True, ttle="plt", 
+        use_mn_bkg=False, use_val_bkg=False, usr_mn=0., interpolate=False, split_mean=[]):
+
+
         print()
         bkg = bkg.rename(columns={self.monitor[key]:self.monitor[key]+"_Bkg"} )
         
         if (use_mn_bkg):
+
             bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").asfreq()
             bkg_mn = bkg[self.monitor[key]+"_Bkg"].mean()
             print("Current-on background set to mean {:2.2e} uCi/ml".format(bkg_mn))
             bkg[self.monitor[key]+"_Bkg"] = bkg[self.monitor[key]+"_Bkg"].replace(np.nan,bkg_mn)
             
         elif (use_val_bkg):
+
             bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").asfreq()
             print("Current-on background set to user value {:2.2e} uCi/ml".format(usr_mn))
-            bkg[self.monitor[key]+"_Bkg"] = bkg[self.monitor[key]+"_Bkg"].replace(np.nan,usr_mn)            
-        else:
+            bkg[self.monitor[key]+"_Bkg"] = bkg[self.monitor[key]+"_Bkg"].replace(np.nan,usr_mn)  
+
+        elif ((len(split_mean) > 0 ) and not (use_mn_bkg or use_val_bkg)):
+
+            bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").asfreq()
+            bkg = bkg.reset_index()
+            dt_mn = []
+
+            for dt in split_mean:
+                dt_mn.append(datetime.datetime.strptime(dt, "%m/%d/%Y %H:%M:%S"))
+
+            for i in range(len(split_mean)):
+                bkg['DATE_TIME'] = pd.to_datetime(bkg['DATE_TIME'])
+                if (i==0):
+                    print("firts")
+                    temp_mn = bkg.loc[bkg['DATE_TIME'] < dt_mn[i], self.monitor[key]+"_Bkg"].mean()
+                    bkg.loc[bkg['DATE_TIME'] < dt_mn[i], self.monitor[key]+'_Bkg'] = temp_mn
+                    bkg.loc[bkg['DATE_TIME'] < dt_mn[i], self.monitor[key]+'_Bkg'] = (
+                        bkg.loc[bkg['DATE_TIME'] < dt_mn[i], self.monitor[key]+'_Bkg'].replace(np.nan,temp_mn))
+
+                elif (i==len(split_mean)):
+                    temp_mn = bkg.loc[bkg['DATE_TIME'] >= dt_mn[i], self.monitor[key]+"_Bkg"].mean()
+
+                    bkg.loc[bkg['DATE_TIME'] >= dt_mn[i], self.monitor[key]+"_Bkg"] = temp_mn
+
+                    bkg.loc[bkg['DATE_TIME'] >= dt_mn[i], self.monitor[key]+"_Bkg"] = (
+                        bkg.loc[bkg['DATE_TIME'] >= dt_mn[i], self.monitor[key]+"_Bkg"].replace(np.nan,temp_mn))                    
+                else:
+                    temp_mn = bkg.loc[(bkg['DATE_TIME'] >= dt_mn[i-1]) & (bkg['DATE_TIME'] < dt_mn[i]),
+                         self.monitor[key]+"_Bkg"].mean()
+
+                    bkg.loc[(bkg['DATE_TIME'] >= dt_mn[i-1]) & (bkg['DATE_TIME'] < dt_mn[i]),
+                         self.monitor[key]+"_Bkg"] = temp_mn       
+
+                    bkg.loc[(bkg['DATE_TIME'] >= dt_mn[i-1]) & (bkg['DATE_TIME'] < dt_mn[i]),
+                         self.monitor[key]+"_Bkg"] = (bkg.loc[(bkg['DATE_TIME'] >= dt_mn[i-1]) & (bkg['DATE_TIME'] < dt_mn[i]),
+                         self.monitor[key]+"_Bkg"].replace(np.nan,temp_mn))       
+
+            #bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").interpolate(method='linear')
+                
+            
+            
+            #print("Current-on background set with split: {:2.2e}, {:2.2e} uCi/ml on date {}".format())
+
+        elif(interpolate):
+
             bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").interpolate(method="linear")
+        
         bkg_df = dt_df.merge(bkg, left_on="DATE_TIME", right_on="DATE_TIME", how="left")
         
         cur = cur.rename(columns={self.monitor[key]:self.monitor[key]+"_Cur"} )
@@ -280,13 +334,34 @@ class air_dat():
         total = concentration * mins * cfm_to_mlmin * ventilation
        
 
-        print("Hours run: {:2.2e}".format(mins*steps))
+        print("Minutes run: {:2.2e}".format(mins*steps))
         print("Fraction of a year: {:2.2f}".format(mins*steps / (365.24*24*60)))
         print("Sum of concentration: {:2.2e} uCi/ml".format(concentration))
         print("Average Concentration {:2.2e} uCi/ml".format(mn_concentration))
         print("Total: {:2.2e} uCi".format(total))
         
         return total
+
+    def power_calculation(self, df, hall, plot=True, ttle='plt'):
+        cur_unit = self.current_units[hall]
+        cur_hall_key = self.current[hall]
+        ene_hall_key = self.energy[hall]
+  
+
+        if (cur_unit != 'none'):
+            print("Calculating power for {}".format(hall))
+            power = (df[cur_hall_key] * df[ene_hall_key]).sum()
+            
+
+            if (cur_unit == "nA"):
+                pow_unit = "mW-h"
+            if (cur_unit == "uA"):
+                pow_unit = "W-h"
+
+            print("     Power = {:2.2e} ({})".format(power, pow_unit))
+        else:
+            return
+
     
     def normalize(self, df, key, net_set=True, ttle='plt', use_net_res=True):
         net_key = "net_" + key

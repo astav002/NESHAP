@@ -1,35 +1,30 @@
 {
 	"hall_a": {
-		"volume_L": 4.20e4,
+		"volume_m3": 4.20e4,
 		"ventilation_cfm": 1000,
-		"ventilation_L_s": 471.94745,
 		"path_length": 26,
 		"surface_area": 7576
 	},
 	"hall_b": {
-		"volume_L": 1,
-		"ventilation_cfm": 1000,
-		"ventilation_L_s": 471.94745
+		"volume_m3": 1,
+		"ventilation_cfm": 1000
 	},
 	"hall_c": {
-		"volume_L": 3.00e4,
+		"volume_m3": 3.00e4,
 		"ventilation_cfm": 1000,
-		"ventilation_L_s": 471.94745,
 		"path_length": 27,
 		"surface_area": 5925
 	},
 	"hall_d": {
-		"volume_L": 1.11e3,
+		"volume_m3": 1.11e3,
 		"ventilation_cfm": 60,
-		"ventilation_L_s": 28.3168466,
-		"path_length": 50,
+		"path_length": 3,
 		"surface_area": 510
 	},
 	"BSY": {
-		"volume_L": 1.82e4,
+		"volume_m3": 1.82e4,
 		"ventilation_cfm": 1000,
-		"ventilation_L_s": 471.94745,
-		"path_length": 3,
+		"path_length": 50,
 		"surface_area": 20000
 	}
 
