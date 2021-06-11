@@ -32,6 +32,8 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
     use_val_bkg = config["use_val_bkg"]
     usr_mn = config["usr_mn"]
     threshold = config["threshold"]
+    split_mean = config["split_mean"]
+    interpolate=config["interpolate"]
 
     # repl_mean = True # used in apply_threshold to replace zeros with the overall mean value for all data
     # sigma_method = True# used in apply_threshold to replace  > 3 sigma with the overall mean value for all data
@@ -71,7 +73,8 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
 
 
         # output some information for the user regarding the location and dates used
-        print("Running results for {}".format(hall))
+        print("\n****************************************")
+        print("\nRunning results for {}".format(hall))
         start =datetime.datetime.strftime(air_df['DATE_TIME'].iloc[0],  '%m/%d/%Y %H:%M:%S')
         end = datetime.datetime.strftime(air_df['DATE_TIME'].iloc[-1],  '%m/%d/%Y %H:%M:%S')
         print("Date Rage {} - {}".format(start, end))
@@ -107,7 +110,10 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
                                     plot=True, 
                                     use_mn_bkg=use_mn_bkg, 
                                     use_val_bkg=use_val_bkg, 
-                                    usr_mn=usr_mn)
+                                    usr_mn=usr_mn,
+                                    interpolate=interpolate,
+                                    split_mean=split_mean
+                                    )
 
         t_step_min=60
         
@@ -152,6 +158,7 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
 
         # Generate standard plots
         air.generate_plots(full, hall, ttle=run_ttle, net_set=True)
+        air.power_calculation(full, hall,plot=True, ttle=run_ttle)
         print()
 
     return res_df
@@ -160,25 +167,16 @@ def main(fle_name, dt_start, halls, run_ttle, res_df):
 if (__name__ == "__main__"):
 
 
-
     if (len(sys.argv) > 1):
-        fle_name = []
-        dt_start = []        
-        for i in range(1,len(sys.argv)):
-            fle_name.append(sys.argv[i])
-
-        for fle in fle_name:
-            dt = input("Enter the start date in format 01/01/2021 00:00:00 for file {} \n".format(fle))
-            dt_start.append(dt)
-
-        usr_hall = input("Enter the hall (format hall_a) or hit Enter to run all: \n")
-        halls = ['hall_a', 'hall_c', 'hall_d', 'BSY']
-        if (usr_hall == ""):
-            halls = halls
-        else:
-            halls = [usr_hall]        
-
-        run_ttle = fle_name
+        print("\n************************************************")
+        print("\nReading in user specified configuration file: {}".format(sys.argv[1]))
+        run_config = open(sys.argv[1])
+        config = json.load(run_config)
+        fle_name = config["data_files"]
+        dt_start = config["data_starts"]
+        halls = config["halls"]
+        run_ttle = config["run_titles"]
+        output_title = config["output_title"]
 
     else:
         run_config = open(os.path.join(os.getcwd(), "analysis_configuration.json"), 'r')
@@ -187,6 +185,7 @@ if (__name__ == "__main__"):
         dt_start = config["data_starts"]
         halls = config["halls"]
         run_ttle = config["run_titles"]
+        output_title = config["output_title"]
 
 
         # fle_name = ["./ans2020_Jan01_Mar31_wBSY.airdat.txt", "./ans2020_Jul29_Sep22_wBSY.airdat.txt"]
@@ -208,4 +207,4 @@ if (__name__ == "__main__"):
     for i in range(len(fle_name)):
         res_df = main(fle_name[i], dt_start[i], halls, run_ttle[i], res_df)
         
-    res_df.to_csv(os.path.join(os.getcwd(), "combined_results.csv"))
+    res_df.to_csv(os.path.join(os.getcwd(), output_title + ".csv"))

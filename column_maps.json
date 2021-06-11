@@ -36,6 +36,15 @@
             "hall_d": 10,
             "BSY": 1           
       }, 
+
+      "current_unit":{
+            "hall_a": "uA",
+            "hall_c": "uA",
+            "hall_b": "uA",
+            "hall_d": "nA",
+            "BSY": "none"           
+      }, 
+
       "join":{
             "C_BSY_J(uA)":["IPM1C01", "IPM1C02", "IPM2C01",
                   "IPM2C02", "IPM3C01", "IPM3C02"]
