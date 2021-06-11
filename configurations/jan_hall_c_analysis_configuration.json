@@ -1,7 +1,7 @@
 {
-	"data_files":["./ans2020_Jan01_Mar31_wBSY.airdat.txt"],
-	"run_titles":["Jan-March_2020", "Jul-Sep_2020"],
-	"data_starts":["01/01/2020 00:00:00", "07/29/2020 00:00:00"],
+	"data_files":["./input_files/ans2020_Jan01_Mar31_wBSY.airdat.txt"],
+	"run_titles":["./output_plots/Jan-March_2020"],
+	"data_starts":["01/01/2020 00:00:00"],
 	"halls":["hall_c"],
 	"repl_mean": true,
 	"sigma_method": true,
@@ -14,5 +14,5 @@
     "threshold":3e-6,
 	"interpolate":false,
 	"split_mean":["01/13/2020 00:00:00","01/18/2020 00:00:00","02/07/2020 00:00:00","02/25/2020 00:00:00","03/13/2020 00:00:00","03/24/2020 00:00:00"],
-	"output_title":"hall_c_split_mean"
+	"output_title":"./output_data/hall_c_split_mean"
 }

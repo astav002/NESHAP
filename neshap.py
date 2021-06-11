@@ -16,12 +16,12 @@ import cls_air_dat
 import cls_isotopic_activity
 
 
-def main(fle_name, dt_start, halls, run_ttle, res_df):
+def main(fle_name, dt_start, halls, run_ttle, res_df, config):
     
     # setup processing parameters from configuration file
 
-    run_config = open(os.path.join(os.getcwd(), "analysis_configuration.json"), 'r')
-    config = json.load(run_config)
+    #run_config = open(os.path.join(os.getcwd(), "analysis_configuration.json"), 'r')
+    #config = json.load(run_config)
 
     repl_mean = config["repl_mean"]
     sigma_method = config["sigma_method"]
@@ -170,6 +170,7 @@ if (__name__ == "__main__"):
     if (len(sys.argv) > 1):
         print("\n************************************************")
         print("\nReading in user specified configuration file: {}".format(sys.argv[1]))
+        
         run_config = open(sys.argv[1])
         config = json.load(run_config)
         fle_name = config["data_files"]
@@ -179,7 +180,7 @@ if (__name__ == "__main__"):
         output_title = config["output_title"]
 
     else:
-        run_config = open(os.path.join(os.getcwd(), "analysis_configuration.json"), 'r')
+        run_config = open(os.path.join(os.getcwd(), "configurations", "analysis_configuration.json"), 'r')
         config = json.load(run_config)
         fle_name = config["data_files"]
         dt_start = config["data_starts"]
@@ -205,6 +206,6 @@ if (__name__ == "__main__"):
 
 
     for i in range(len(fle_name)):
-        res_df = main(fle_name[i], dt_start[i], halls, run_ttle[i], res_df)
+        res_df = main(fle_name[i], dt_start[i], halls, run_ttle[i], res_df,config)
         
     res_df.to_csv(os.path.join(os.getcwd(), output_title + ".csv"))
