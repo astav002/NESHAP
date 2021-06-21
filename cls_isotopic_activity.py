@@ -51,7 +51,7 @@ class cls_isotopic_activity:
         for hall in self.hall_const:
             
             self.hall_const[hall]["lambda_v_s"] = (self.hall_const[hall]["ventilation_cfm"] * cfm_to_mlmin / 
-                                                    self.hall_const[hall]["volume_m3"] *1000 *60)
+                                                    (self.hall_const[hall]["volume_m3"] * 1e6 *60))
           
 
         # now add the lamba_decay
