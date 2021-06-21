@@ -1,0 +1,18 @@
+{
+	"data_files":["./input_files/ans2020_Jan01_Mar31_wBSY.airdat.txt", "./input_files/ans2020_Jul29_Sep22_wBSY.airdat.txt"],
+	"run_titles":["./output_plots/Jan-March_2020_interpo", "./output_plots/Jul-Sep_2020_interpo"],
+	"data_starts":["01/01/2020 00:00:00", "07/29/2020 00:00:00"],
+	"halls":["hall_a", "hall_c", "hall_d", "BSY"],
+	"repl_mean": true,
+	"sigma_method": true,
+	"replace_zero": false,
+	"pad": 5,
+	"no_neg": true,
+	"use_mn_bkg": false,
+	"use_val_bkg": false,
+	"usr_mn": 1.87e-7,
+    "threshold":3e-6,
+	"interpolate":true,
+	"split_mean":[],
+	"output_title":"./output_data/all_halls_interp"
+}

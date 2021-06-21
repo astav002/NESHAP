@@ -220,6 +220,7 @@ class air_dat():
             cur[self.monitor[key]].hist(alpha=0.5, label="monitor_"+key, ax=ax, bins=50)
             ax.set_title("Air Monitor Distribution: {}".format(key))
             ax.set_xlabel("Concentration ($\mu/ml$)")
+            ax.ticklabel_format(axis='x', style='scientific', scilimits=(0,0))
             ax.set_ylabel
             ax.legend()  
             plt.savefig(os.path.join(os.getcwd(), ttle + "_" + key+"_bkg_cur_histograms.jpg"))
@@ -250,6 +251,8 @@ class air_dat():
             bkg[self.monitor[key]+"_Bkg"] = bkg[self.monitor[key]+"_Bkg"].replace(np.nan,usr_mn)  
 
         elif ((len(split_mean) > 0 ) and not (use_mn_bkg or use_val_bkg)):
+            # split the data set according to the dates within the analysis_configuration.json file
+            # then we'll set the background values to the mean within these ranges
 
             bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").asfreq()
             bkg = bkg.reset_index()
@@ -291,7 +294,7 @@ class air_dat():
             
             #print("Current-on background set with split: {:2.2e}, {:2.2e} uCi/ml on date {}".format())
 
-        elif(interpolate):
+        else:
 
             bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").interpolate(method="linear")
         
@@ -318,7 +321,7 @@ class air_dat():
             plt.figure()
             fig, ax = plt.subplots()
             dt_df.plot(x="DATE_TIME", y="net_"+key, ax=ax)
-            ax.set_title("Net Concentration")
+            ax.set_title(key + " Net Concentration")
             plt.xticks(rotation=45)            
             plt.savefig(os.path.join(os.getcwd(), ttle + "_" + key+"_net_concentration.jpg"))
             plt.close()
@@ -343,6 +346,10 @@ class air_dat():
         return total
 
     def power_calculation(self, df, hall, plot=True, ttle='plt'):
+        """
+        Simple power calculation using energy and current over the data range
+        """
+        
         cur_unit = self.current_units[hall]
         cur_hall_key = self.current[hall]
         ene_hall_key = self.energy[hall]
@@ -387,16 +394,16 @@ class air_dat():
         fig, ax = plt.subplots(ncols=2, nrows=2, figsize=(20, 10))
         ax[0][0].plot(df["DATE_TIME"], norm_c, "o-", label="Normalized Current", alpha=0.5)
         ax[0][0].plot(df["DATE_TIME"], norm_air, "o-", label="Normalized Concentration", alpha=0.5)
-        ax[0][0].set_title("Normalized Current and Net Concentration")
+        ax[0][0].set_title(key+ " Normalized Current and Net Concentration")
         ax[0][0].legend()
 
         ax[0][1].plot(df["DATE_TIME"], norm_p, label="Normalized Power")
         ax[0][1].plot(df["DATE_TIME"], norm_air, label="Normalized Concentration")
-        ax[0][1].set_title("Normalized Power and Net Concentration")
+        ax[0][1].set_title(key + " Normalized Power and Net Concentration")
         ax[0][1].legend()
         
         ax[1][0].plot(norm_p, norm_air, "x", label="Normalized Airborne")
-        ax[1][0].set_title("Airborned Concentration vs. Current")    
+        ax[1][0].set_title(key+ " Airborned Concentration vs. Current")    
         ax[1][0].legend()        
 
 
@@ -426,14 +433,14 @@ class air_dat():
             fig, ax = plt.subplots(figsize=(20,10), nrows=2, sharex=True)
             ax[0].plot(df["DATE_TIME"], df[air_cur_key], "o-", alpha=0.5, label="Current On")
             ax[0].plot(df["DATE_TIME"], df[air_bkg_key], "o-", alpha=0.5, label="Background")
-            ax[0].ticklabel_format(style="sci", axis="y", useOffset=False)
-            ax[0].set_title("Calculated Airborne Concentrations")
+            ax[0].ticklabel_format(style="sci", scilimits=(0,0), axis="y", useOffset=False)
+            ax[0].set_title(key + " Calculated Airborne Concentrations")
             ax[0].legend()
 
             ax[1].plot(df["DATE_TIME"], df[net_key], "o-", alpha=0.5, label="Net Signal")
-            ax[1].set_title("Net Airborne Concentration $\mu Ci/ml$")
+            ax[1].set_title(key + " Net Airborne Concentration $\mu Ci/ml$")
             ax[1].legend()
-            ax[1].ticklabel_format(style="sci", axis="y", useOffset=False)      
+            ax[1].ticklabel_format(style="sci", axis="y", scilimits=(0,0), useOffset=False)      
             plt.savefig(os.path.join(os.getcwd(), ttle+ "_" + key+"_bkg_cur_overlay.jpg"))
             plt.close()
             
