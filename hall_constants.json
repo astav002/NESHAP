@@ -25,7 +25,7 @@
 		"volume_m3": 1.82e4,
 		"ventilation_cfm": 1000,
 		"path_length": 50,
-		"surface_area": 20000
+		"surface_area": 2000
 	}
 
 }
