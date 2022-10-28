@@ -101,7 +101,7 @@ class air_dat():
 
 
 
-    def apply_threshold(self, air_df, key="hall_c", sigma_method=True, repl_mean=True, replace_zero=True):
+    def apply_threshold(self, air_df, key="hall_c", sigma_method=True, repl_mean=True, replace_zero=True, sigma=3):
         print()
         air_df_sub = air_df[self.monitor[key]]
         #air_df = air_df[air_df_sub < self.threshold]
@@ -119,7 +119,7 @@ class air_dat():
         # if we choose we can reject the mean + 3 sigma values once the 
         if (sigma_method):
             print("Replace greater than 3 sigma with mean value")
-            threshold = (air_df_sub[air_df_sub <= threshold].std() * 3 + 
+            threshold = (air_df_sub[air_df_sub <= threshold].std() * sigma + 
                          air_df_sub[air_df_sub <= threshold].mean())
             
             sigma_test_res = air_df_sub > threshold
@@ -222,6 +222,7 @@ class air_dat():
             ax.set_xlabel("Concentration ($\mu/ml$)")
             ax.ticklabel_format(axis='x', style='scientific', scilimits=(0,0))
             ax.set_ylabel
+            ax.set_yscale('log')
             ax.legend()  
             plt.savefig(os.path.join(os.getcwd(), ttle + "_" + key+"_bkg_cur_histograms.jpg"))
             plt.close()

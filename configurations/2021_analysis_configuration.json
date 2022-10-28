@@ -1,7 +1,7 @@
 {
 	"data_files":["./input_files/2021/ans2021_Jul17_Dec29.airdat.txt"],
 	"run_titles":["./output_plots/2021/Jul-Dec_2021"],
-	"data_starts":["07/01/2021 00:00:00", "12/29/2020 00:00:00"],
+	"data_starts":["07/01/2021 00:00:00", "12/30/2021 00:00:00"],
 	"halls":["hall_a", "hall_c", "hall_d", "BSY"],
 	"repl_mean": true,
 	"sigma_method": true,

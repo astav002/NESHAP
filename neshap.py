@@ -79,16 +79,6 @@ def main(fle_name, dt_start, halls, run_ttle, res_df, config):
         end = datetime.datetime.strftime(air_df['DATE_TIME'].iloc[-1],  '%m/%d/%Y %H:%M:%S')
         print("Date Rage {} - {}".format(start, end))
 
-
-        # apply theshold to the full dataset, threshold here is air_threshold from column_maps.json
-
-        air_df = air.apply_threshold(air_df, key=hall,
-                                    repl_mean=repl_mean,
-                                    sigma_method=sigma_method,
-                                    replace_zero=replace_zero)
-
-
-
         # get the current (val), background (bkg) data into separate dataframes based on padding and current limits for a hall
         # anything above the current_limit assumes beam on target
 
@@ -97,7 +87,24 @@ def main(fle_name, dt_start, halls, run_ttle, res_df, config):
                                                         key=hall, 
                                                         pad=pad, 
                                                         show_hist=True, 
-                                                        current_limit=cur_lim_hall_key)   
+                                                        current_limit=cur_lim_hall_key)           
+
+
+        # apply theshold to the full dataset, threshold here is air_threshold from column_maps.json
+
+        bkg = air.apply_threshold(bkg, key=hall,
+                                    repl_mean=repl_mean,
+                                    sigma_method=sigma_method,
+                                    replace_zero=replace_zero)
+
+        val = air.apply_threshold(val, key=hall,
+                                    repl_mean=repl_mean,
+                                    sigma_method=sigma_method,
+                                    replace_zero=replace_zero)                                    
+
+
+
+
 
         # we setup a blank dataframe with the date range we want to populate with bkg/air monitoring after processing
         dt_df = pd.DataFrame(air_df['DATE_TIME'])
