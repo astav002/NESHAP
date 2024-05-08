@@ -231,8 +231,21 @@ class air_dat():
         return full_data, cur, bkg, current_steps
 
     
-    def normalize_get_net(self, dt_df, cur, bkg, key, no_neg=True, plot=True, ttle="plt", 
-        use_mn_bkg=False, use_val_bkg=False, usr_mn=0., interpolate=False, split_mean=[]):
+    def normalize_get_net(self, 
+                          dt_df, 
+                          cur, 
+                          bkg, 
+                          key, 
+                          no_neg=True, 
+                          plot=True, 
+                          ttle="plt", 
+                          use_mn_bkg=False, 
+                          use_val_bkg=False, 
+                          usr_mn=0., 
+                          interpolate=False, 
+                          split_mean=[],
+                          smooth_bkg=True,
+                          smooth_window=20):
 
 
         print()
@@ -296,8 +309,13 @@ class air_dat():
             #print("Current-on background set with split: {:2.2e}, {:2.2e} uCi/ml on date {}".format())
 
         else:
-
-            bkg = pd.DataFrame(bkg).set_index("DATE_TIME").resample("30Min").interpolate(method="linear")
+            
+            bkg = pd.DataFrame(bkg).set_index("DATE_TIME")
+            if (smooth_bkg):
+                bkg = bkg.rolling(smooth_window, center=True).mean()
+            bkg = bkg.resample("30Min").interpolate(method="linear")
+            
+            
         
         bkg_df = dt_df.merge(bkg, left_on="DATE_TIME", right_on="DATE_TIME", how="left")
         

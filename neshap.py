@@ -23,6 +23,9 @@ def main(fle_name, dt_start, halls, run_ttle, res_df, config):
     #run_config = open(os.path.join(os.getcwd(), "analysis_configuration.json"), 'r')
     #config = json.load(run_config)
 
+    # convert config into local variables
+
+    # there are fancier ways of doing this, but we'll keep it explicit for interperating
     repl_mean = config["repl_mean"]
     sigma_method = config["sigma_method"]
     replace_zero = config["replace_zero"]
@@ -34,6 +37,8 @@ def main(fle_name, dt_start, halls, run_ttle, res_df, config):
     threshold = config["threshold"]
     split_mean = config["split_mean"]
     interpolate=config["interpolate"]
+    smooth_bkg=config["smooth_bkg"]
+    smooth_window=config["smooth_window"]
 
     # repl_mean = True # used in apply_threshold to replace zeros with the overall mean value for all data
     # sigma_method = True# used in apply_threshold to replace  > 3 sigma with the overall mean value for all data
@@ -119,7 +124,9 @@ def main(fle_name, dt_start, halls, run_ttle, res_df, config):
                                     use_val_bkg=use_val_bkg, 
                                     usr_mn=usr_mn,
                                     interpolate=interpolate,
-                                    split_mean=split_mean
+                                    split_mean=split_mean,
+                                    smooth_bkg=smooth_bkg,
+                                    smooth_window=smooth_window
                                     )
 
         t_step_min=60
