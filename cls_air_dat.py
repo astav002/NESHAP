@@ -224,7 +224,9 @@ class air_dat():
             ax.set_ylabel
             ax.set_yscale('log')
             ax.legend()  
-            plt.savefig(os.path.join(os.getcwd(), ttle + "_" + key+"_bkg_cur_histograms.jpg"))
+            save_path = os.path.join(os.getcwd(), ttle + "_" + key+"_bkg_cur_histograms.jpg")
+            print(f"Saving to :{save_path}")
+            plt.savefig(save_path)
             plt.close()
         
         

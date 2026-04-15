@@ -192,6 +192,7 @@ if (__name__ == "__main__"):
         halls = config["halls"]
         run_ttle = config["run_titles"]
         output_title = config["output_title"]
+        print(os.path.join(os.getcwd()))
 
     else:
         run_config = open(os.path.join(os.getcwd(), "configurations", "analysis_configuration.json"), 'r')

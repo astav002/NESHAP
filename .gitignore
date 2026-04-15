@@ -128,5 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
  
+!output_plots/placeholder.txt
 *.jpg
 *.txt
